@@ -6,14 +6,14 @@
 //#-------------------------------------------------
 
 
-#include "camaraConfig.h"
+#include "video/camaraConfig.h"
 #include <QApplication>
 
 
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    camaraConfig w;
 
     w.show();
     //w.Start(); // todo como thread en MainVideoCapture

@@ -14,7 +14,6 @@ void MainVideoCapture::run()
         while (true) {
             // procesando imagen
             //Canny( RGBframe, imagen_procesada, 100, 200 ); // edge detector
-
             // pocesar imagen de video y emitir senial
             mVideoCap >> RGBframe;
             if(!RGBframe.empty()){
@@ -53,6 +52,7 @@ void MainVideoCapture::run()
                 }
                 allDetections = cvMatToQPixmap(allDetectionsFrame);
 
+                // señal de nueva imagen
                 emit newPixmapCapture();
             }
         }

@@ -15,7 +15,6 @@ class MainVideoCapture : public QThread
     Q_OBJECT
 public:
     MainVideoCapture(QObject *parent = nullptr );
-
     // PixMaps getter
     QPixmap getRGBpixmap() const;
     QPixmap getHSVpixmap() const;
