@@ -36,6 +36,13 @@ camaraConfig::camaraConfig(QWidget *parent) :
         ui->opencvFrame_4->setPixmap(mOpenCV_videoCapture->getBinarioDetec().scaled(320,240));
         UpdateDetectParametros();
     });
+    connect(mOpenCV_videoCapture, &MainVideoCapture::presenciaDetectada,this,[&](){
+        ui->label_presencia->setText("Presencia!");
+    });
+    connect(mOpenCV_videoCapture, &MainVideoCapture::sinPresencia,this,[&](){
+        ui->label_presencia->setText("Nada por aqui");
+    });
+
     // arraque desde el inicio las capturas
     mOpenCV_videoCapture->start(QThread::HighPriority);
 }

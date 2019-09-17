@@ -1,4 +1,4 @@
-#ifndef MAINVIDEOCAPTURE_H
+﻿#ifndef MAINVIDEOCAPTURE_H
 #define MAINVIDEOCAPTURE_H
 #include <QPixmap>
 #include <QImage>
@@ -51,8 +51,12 @@ public:
     // item setter
     item setUpObject(std::string name, int hmin, int hmax, int smin, int smax, int vmin, int vmax);
 
+    bool getPresencia() const;
+
 signals:
     void newPixmapCapture();
+    void presenciaDetectada();
+    void sinPresencia();
 protected:
     void run(); //virtual del Qthread
 private:
@@ -69,6 +73,11 @@ private:
     cv::Mat allDetectionsFrame;
     // binario de deteccion actual
     QPixmap binarioDetec;
+
+    // bandera de presencia
+    bool Presencia = false;
+    int DetectandoValidar = 3;
+    int sinDetecValidar = 10;
 
     ///////// Configuracion de objetos captura
     // area de captura
@@ -96,7 +105,9 @@ private:
     std::string numberToString(int number);
     void drawObject(int x, int y, cv::Mat &frame, item tempItem);
     void morphObject(cv::Mat &thresh);
-    void trackObject(int &x, int &y, item tempItem, cv::Mat &cameraFeed);
+    bool trackObject(int &x, int &y, item tempItem, cv::Mat &cameraFeed);
+    // comprueba nuevo evento de deteccion y envia signal, corre en cada imagen
+    void signalDetection(bool prese);
 };
 
 #endif // MAINVIDEOCAPTURE_H
