@@ -4,8 +4,8 @@
 using namespace cv;
 using namespace std;
 
-MainVideoCapture::MainVideoCapture(QObject *parent)
-    : QThread { parent }, mVideoCap { ID_CAMERA }
+MainVideoCapture::MainVideoCapture(int idCam, QObject *parent)
+    : QThread { parent }, mVideoCap { idCam }
 {}
 
 void MainVideoCapture::run()

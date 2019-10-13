@@ -8,13 +8,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#define ID_CAMERA 0 //"http://192.168.0.20:8081"
+// #define ID_CAMERA 2 //"http://192.168.0.20:8081"
 
 class MainVideoCapture : public QThread
 {
     Q_OBJECT
 public:
-    MainVideoCapture(QObject *parent = nullptr );
+    MainVideoCapture(int idCam, QObject *parent = nullptr );
     // PixMaps getter
     QPixmap getRGBpixmap() const;
     QPixmap getHSVpixmap() const;

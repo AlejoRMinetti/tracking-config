@@ -20,18 +20,18 @@
 
 
 namespace Ui {
-class camaraConfig;
+class MainWindow;
 }
 
 class MainVideoCapture;
 
-class camaraConfig : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit camaraConfig(QWidget *parent = 0);
-    ~camaraConfig();
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private slots:
     void on_addButton_clicked();
@@ -40,8 +40,8 @@ private slots:
     void UpdateDetectParametros();
 
 private:
-    Ui::camaraConfig *ui;
-    MainVideoCapture *mOpenCV_videoCapture;
+    Ui::MainWindow *ui;
+    MainVideoCapture *mOpenCV_videoCapture[2];
 };
 
 #endif // CAMARACONFIG_H

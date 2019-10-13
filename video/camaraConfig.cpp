@@ -14,60 +14,67 @@
 //#-------------------------------------------------
 
 #include "video/camaraConfig.h"
+// error ui por no crear la ventana desde Qt (ui from class)
 #include "ui_camaraConfig.h"
 #include "video/mainvideocapture.h"
 
 using namespace cv;
 using namespace std;
 
-camaraConfig::camaraConfig(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::camaraConfig)
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     // openCV video on GUI
-    mOpenCV_videoCapture = new MainVideoCapture(this);
-    connect(mOpenCV_videoCapture, &MainVideoCapture::newPixmapCapture,this,[&](){
-        ui->opencvFrame->setPixmap(mOpenCV_videoCapture->getAllDetections().scaled(320,240)); // mostrar imagen RGB
+    mOpenCV_videoCapture[0] = new MainVideoCapture(0, this);
+    mOpenCV_videoCapture[1] = new MainVideoCapture(2, this);
+    connect(mOpenCV_videoCapture[0], &MainVideoCapture::newPixmapCapture,this,[&](){
+        ui->opencvFrame->setPixmap(mOpenCV_videoCapture[0]->getAllDetections().scaled(320,240)); // mostrar imagen RGB
         // usando .scaled(ui->opencvFrame->width(),ui->opencvFrame->height()) se va agrandando la pantalla sola!
-        ui->opencvFrame_2->setPixmap(mOpenCV_videoCapture->getActualDetect().scaled(320,240)); // mostrar imagen // procesar y mostrar imagen HSV
-        ui->opencvFrame_3->setPixmap(mOpenCV_videoCapture->getHSVpixmap().scaled(320,240));
-        ui->opencvFrame_4->setPixmap(mOpenCV_videoCapture->getBinarioDetec().scaled(320,240));
+        ui->opencvFrame_3->setPixmap(mOpenCV_videoCapture[0]->getBinarioDetec().scaled(320,240));
         UpdateDetectParametros();
     });
-    connect(mOpenCV_videoCapture, &MainVideoCapture::presenciaDetectada,this,[&](){
+    connect(mOpenCV_videoCapture[1], &MainVideoCapture::newPixmapCapture,this,[&](){
+        ui->opencvFrame_2->setPixmap(mOpenCV_videoCapture[1]->getAllDetections().scaled(320,240)); // mostrar imagen // procesar y mostrar imagen HSV
+        ui->opencvFrame_4->setPixmap(mOpenCV_videoCapture[1]->getBinarioDetec().scaled(320,240));
+    });
+    connect(mOpenCV_videoCapture[0], &MainVideoCapture::presenciaDetectada,this,[&](){
         ui->label_presencia->setText("Presencia!");
     });
-    connect(mOpenCV_videoCapture, &MainVideoCapture::sinPresencia,this,[&](){
+    connect(mOpenCV_videoCapture[0], &MainVideoCapture::sinPresencia,this,[&](){
         ui->label_presencia->setText("Nada por aqui");
     });
 
     // arraque desde el inicio las capturas
-    mOpenCV_videoCapture->start(QThread::HighPriority);
+    mOpenCV_videoCapture[0]->start(QThread::HighPriority);
+    mOpenCV_videoCapture[1]->start(QThread::HighPriority);
 }
 
-camaraConfig::~camaraConfig()
+MainWindow::~MainWindow()
 {
     delete ui;
     //mOpenCV_videoCapture->terminate();
     //mOpenCV_videoCapture->quit();
 }
 
-void camaraConfig::on_addButton_clicked()
+void MainWindow::on_addButton_clicked()
 {
     // todo agregar nueva deteccion
-    mOpenCV_videoCapture->objects.push_back(mOpenCV_videoCapture->setUpObject(ui->nameLineEdit->text().toStdString(),
-                                                        mOpenCV_videoCapture->H_MIN,
-                                                        mOpenCV_videoCapture->H_MAX,
-                                                        mOpenCV_videoCapture->S_MIN,
-                                                        mOpenCV_videoCapture->S_MAX,
-                                                        mOpenCV_videoCapture->V_MIN,
-                                                        mOpenCV_videoCapture->V_MAX));
+    mOpenCV_videoCapture[0]->objects.push_back(
+                mOpenCV_videoCapture[0]->setUpObject(
+                ui->nameLineEdit->text().toStdString(),
+                mOpenCV_videoCapture[0]->H_MIN,
+                mOpenCV_videoCapture[0]->H_MAX,
+                mOpenCV_videoCapture[0]->S_MIN,
+                mOpenCV_videoCapture[0]->S_MAX,
+                mOpenCV_videoCapture[0]->V_MIN,
+                mOpenCV_videoCapture[0]->V_MAX));
     ui->nameLineEdit->clear();
 }
 
-void camaraConfig::on_defaultButton_clicked()
+void MainWindow::on_defaultButton_clicked()
 {
     // todo guardar y reiniciar carga de deteccion
     ui->hminBox->setValue(0);
@@ -79,12 +86,12 @@ void camaraConfig::on_defaultButton_clicked()
 }
 
 ////////// update de slicers
-void camaraConfig::UpdateDetectParametros(){
+void MainWindow::UpdateDetectParametros(){
     // get parametros para creacion de deteccion de bordes
-    mOpenCV_videoCapture->H_MIN = ui->hminBox->text().toInt();
-    mOpenCV_videoCapture->H_MAX = ui->hmaxBox->text().toInt();
-    mOpenCV_videoCapture->S_MIN = ui->sminBox->text().toInt();
-    mOpenCV_videoCapture->S_MAX = ui->smaxBox->text().toInt();
-    mOpenCV_videoCapture->V_MIN = ui->vminBox->text().toInt();
-    mOpenCV_videoCapture->V_MAX = ui->vmaxBox->text().toInt();
+    mOpenCV_videoCapture[0]->H_MIN = ui->hminBox->text().toInt();
+    mOpenCV_videoCapture[0]->H_MAX = ui->hmaxBox->text().toInt();
+    mOpenCV_videoCapture[0]->S_MIN = ui->sminBox->text().toInt();
+    mOpenCV_videoCapture[0]->S_MAX = ui->smaxBox->text().toInt();
+    mOpenCV_videoCapture[0]->V_MIN = ui->vminBox->text().toInt();
+    mOpenCV_videoCapture[0]->V_MAX = ui->vmaxBox->text().toInt();
 }

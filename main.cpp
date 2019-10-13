@@ -13,7 +13,7 @@
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
-    camaraConfig w;
+    MainWindow w;
 
     w.show();
     //w.Start(); // todo como thread en MainVideoCapture
