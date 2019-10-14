@@ -23,7 +23,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainVideoCapture;
+class MyVideoCapture;
 
 class MainWindow : public QMainWindow
 {
@@ -41,7 +41,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    MainVideoCapture *mOpenCV_videoCapture[2];
+    MyVideoCapture *mOpenCV_videoCapture[2];
 };
 
 #endif // CAMARACONFIG_H

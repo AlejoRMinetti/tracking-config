@@ -15,15 +15,19 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         video/camaraConfig.cpp \
-        video/mainvideocapture.cpp
+        video/myvideocapture.cpp
 
-HEADERS  += video/camaraConfig.h \
-        video/mainvideocapture.h
+HEADERS  += \
+        video/camaraConfig.h \
+        video/myvideocapture.h
 
 FORMS    += video/camaraConfig.ui
 
 INCLUDEPATH += 'pkg-config --cflags opencv'
 LIBS        += `pkg-config --libs opencv`
+
+DISTFILES += \
+    README.md
 
 
 
