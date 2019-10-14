@@ -24,6 +24,19 @@ public:
     // binario actual getter
     QPixmap getBinarioDetec() const;
 
+    // check for OK of ID Device
+    static bool isCamIdOk(int idCam){
+        cv::VideoCapture testVideoCap(idCam);
+        if(!testVideoCap.isOpened()){  // check if we succeeded
+            //qDebug() << "Id cam: " << idCam << " no admitido.";
+            testVideoCap.release();
+            return 0;
+        }
+        testVideoCap.release();
+        //qDebug() << "Id cam: " << idCam << " OK.";
+        return 1;
+    }
+
     // public variables
     ////////// variables de deteccion de objeto
     //Variables to hold HSV values. (HSV = HUE, SATURATION and VALUE)

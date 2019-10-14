@@ -27,9 +27,22 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // openCV video habitaciones y configuracion
+    int idVidCap = 0;
+    for (int idDevice = 0; idDevice < 10; idDevice++) {
+        if( MainVideoCapture::isCamIdOk(idDevice) ){
+            //qDebug() << "Nueva camara: " << idVidCap +1 << " en id Devide: " << idDevice;
+            mOpenCV_videoCapture[idVidCap] = new MainVideoCapture(idDevice,this);
+            idVidCap ++;
+        }
+        if( idVidCap > 4-1)
+            break;
+    }
+    //qDebug() << "Cantidad de camara: " << cams_activas;
+
     // openCV video on GUI
-    mOpenCV_videoCapture[0] = new MainVideoCapture(0, this);
-    mOpenCV_videoCapture[1] = new MainVideoCapture(2, this);
+    //mOpenCV_videoCapture[0] = new MainVideoCapture(0, this);
+    //mOpenCV_videoCapture[1] = new MainVideoCapture(2, this);
     connect(mOpenCV_videoCapture[0], &MainVideoCapture::newPixmapCapture,this,[&](){
         ui->opencvFrame->setPixmap(mOpenCV_videoCapture[0]->getAllDetections().scaled(320,240)); // mostrar imagen RGB
         // usando .scaled(ui->opencvFrame->width(),ui->opencvFrame->height()) se va agrandando la pantalla sola!
